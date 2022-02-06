@@ -73,6 +73,11 @@ public class MultitransferContoller {
                 .body(multitransfer1.getId_multitransfer());
     }
 
+    @GetMapping("/")
+    public String test_me(){
+        return "test";
+    }
+
     @GetMapping("/MultiTransfer/agent")
     public ResponseEntity<List<MultitransferDTO>> getMultiTransferByidAgent(
             @RequestParam("idAgent") int idAgent , @RequestParam("page") int page  ){
