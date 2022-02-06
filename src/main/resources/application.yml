@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: TRANSFER-SERVICE
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/houssam802/national_transfer_config_server
+          default-label: main
+          clone-on-start: true
+          force-pull: true
+          searchPaths: myapp
+
+
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: https://ensaregistry-serv.herokuapp.com/eureka
+  instance:
+    preferIpAddress: true
