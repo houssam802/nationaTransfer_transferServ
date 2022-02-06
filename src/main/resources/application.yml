@@ -15,7 +15,9 @@ spring:
 
 eureka:
   client:
+    register-with-eureka: true
+    fetch-registry: true
     serviceUrl:
-      defaultZone: https://ensaregistry-serv.herokuapp.com/eureka
+      defaultZone: https://ensaregistry-serv.herokuapp.com/eureka/
   instance:
     preferIpAddress: true
