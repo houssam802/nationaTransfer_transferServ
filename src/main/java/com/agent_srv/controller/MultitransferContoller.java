@@ -196,13 +196,8 @@ public class MultitransferContoller {
                 smsService.sendSMS(smsRequest);
             }
             transfer.setId_multitransfer(id_multitransfer.get());
-            transferList.add(transfer);
-
             transferService.updateTransferById(transfer.getId_transfer(),transfer);
         });
-
-        multitransfer1.setTransfers(transferList);
-       // multitransferService.createTransfer(multitransfer1);
 
     }
 
