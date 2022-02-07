@@ -84,7 +84,7 @@ public class TransferController {
         return transferService.updateTransferById(id,transfer);
     }
 
-    @PutMapping("/UniqueTransfer/serve/{reference}")
+    @PostMapping("/UniqueTransfer/serve/{reference}")
     public ResponseEntity<MultitransferDTO> serveTransferByReference(@PathVariable("reference") String reference){
         Multitransfer multitransfer=multitransferService.serve_transfer(reference);
         Transfer transfer = multitransfer.getTransfers().get(0);
@@ -105,7 +105,7 @@ public class TransferController {
                 .body(transferService.checkRecipientInfosByReference(reference,transfer));
     }
 
-    @PutMapping("/UniqueTransfer/extort/{reference}")
+    @PostMapping("/UniqueTransfer/extort/{reference}")
     public ResponseEntity<MultitransferDTO> extortTransferByReference(@PathVariable("reference") String reference,
                                                                       @RequestParam("motif") String motif){
         Multitransfer multitransfer=multitransferService.extort_transfer(reference,motif);
