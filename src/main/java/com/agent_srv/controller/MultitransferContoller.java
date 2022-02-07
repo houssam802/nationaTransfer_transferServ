@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -74,7 +75,7 @@ public class MultitransferContoller {
     }
 
     @GetMapping("/")
-    public String test_me(){
+    public String test_me   (){
         return "test";
     }
 
@@ -152,6 +153,7 @@ public class MultitransferContoller {
 
 
     private void setTransferData(Multitransfer multitransfer1 ,AtomicReference<Integer> id_multitransfer){
+        List<Transfer> transferList = new ArrayList<>();
         multitransfer1.getTransfers().forEach(transfer -> {
             Integer id_transfer = transfer.getId_transfer();
             transfer.setTransfer_reference("837"+ id_transfer.toString()+ RandomStringUtils.random(10 - id_transfer.toString().length() ,false,true));
@@ -177,10 +179,28 @@ public class MultitransferContoller {
                 smsRequest.setNotifyMsgAndPinCode(transfer.getTransfer_reference(),pin,transfer.getTransfer_amount());
                 smsService.sendSMS(smsRequest);
             }
-            transfer.setId_multitransfer(id_multitransfer.get());
-            transferService.updateTransferById(transfer.getId_transfer(),transfer);
+            if(!multitransfer1.isNotify_transfer() && !multitransfer1.isTransfer_by_cash()){
+                ///send to source
+                SMSRequest smsRequest_src = new SMSRequest(multitransfer1.getSender_phnumber());
+                smsRequest_src.setNotifyMsg(transfer.getTransfer_reference(),transfer.getTransfer_amount());
+                smsService.sendSMS(smsRequest_src);
+            }
+            if(multitransfer1.isNotify_transfer() && !multitransfer1.isTransfer_by_cash()){
+                ///send to both
+                SMSRequest smsRequest_src = new SMSRequest(multitransfer1.getSender_phnumber());
+                smsRequest_src.setNotifyMsg(transfer.getTransfer_reference(),transfer.getTransfer_amount());
+                smsService.sendSMS(smsRequest_src);
 
+                SMSRequest smsRequest = new SMSRequest(transfer.getReceiver_phnumber());
+                smsRequest.setNotifyMsg(transfer.getTransfer_reference(),transfer.getTransfer_amount());
+                smsService.sendSMS(smsRequest);
+            }
+            transfer.setId_multitransfer(id_multitransfer.get());
+            transferList.add(transfer);
         });
+
+        multitransfer1.setTransfers(transferList);
+        multitransferService.createTransfer(multitransfer1);
 
     }
 
