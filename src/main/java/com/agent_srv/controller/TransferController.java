@@ -78,7 +78,7 @@ public class TransferController {
                 .body(multitransferConverter.convertToDTOs(TransferServiceImpl.cleanList_by_status(list_multitransfer,status)));
     }
 
-    @PutMapping("/UniqueTransfer/{id}")
+    @PostMapping("/UniqueTransfer/{id}")
     public Transfer updateTransferById(@PathVariable("id") int id,
                                        @RequestBody Transfer transfer){
         return transferService.updateTransferById(id,transfer);
@@ -97,7 +97,7 @@ public class TransferController {
     }
 
 
-    @PutMapping("/UniqueTransfer/serve/{reference}")
+    @PostMapping("/UniqueTransfer/serve/{reference}")
     public ResponseEntity<?> checkRecipientInfosByReference(@PathVariable("reference") String reference,
                                                             @RequestBody Transfer transfer){
         return ResponseEntity
