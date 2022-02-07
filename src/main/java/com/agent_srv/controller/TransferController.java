@@ -84,7 +84,7 @@ public class TransferController {
         return transferService.updateTransferById(id,transfer);
     }
 
-    @PostMapping("/UniqueTransfer/serve/{reference}")
+    @PutMapping("/UniqueTransfer/serve/{reference}")
     public ResponseEntity<MultitransferDTO> serveTransferByReference(@PathVariable("reference") String reference){
         Multitransfer multitransfer=multitransferService.serve_transfer(reference);
         Transfer transfer = multitransfer.getTransfers().get(0);
