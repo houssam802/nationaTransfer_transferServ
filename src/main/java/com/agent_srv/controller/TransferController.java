@@ -97,7 +97,7 @@ public class TransferController {
     }
 
 
-    @PostMapping("/UniqueTransfer/serve/{reference}")
+    @PutMapping("/UniqueTransfer/serve/{reference}")
     public ResponseEntity<?> checkRecipientInfosByReference(@PathVariable("reference") String reference,
                                                             @RequestBody Transfer transfer){
         return ResponseEntity
@@ -105,11 +105,10 @@ public class TransferController {
                 .body(transferService.checkRecipientInfosByReference(reference,transfer));
     }
 
-    @PostMapping("/UniqueTransfer/extort/{reference}")
+    @PutMapping("/UniqueTransfer/extort/{reference}")
     public ResponseEntity<MultitransferDTO> extortTransferByReference(@PathVariable("reference") String reference,
                                                                       @RequestParam("motif") String motif){
         Multitransfer multitransfer=multitransferService.extort_transfer(reference,motif);
-        Transfer transfer = multitransfer.getTransfers().get(0);
         SMSRequest smsRequest_src = new SMSRequest(multitransfer.getSender_phnumber());
         smsRequest_src.setExtort_NotifyMsg(motif,multitransfer);
         smsService.sendSMS(smsRequest_src);
@@ -122,7 +121,6 @@ public class TransferController {
     public ResponseEntity<MultitransferDTO> bloqueTransferByReference(@PathVariable("reference") String reference,
                                                                        @RequestParam("motif") String motif){
         Multitransfer multitransfer = multitransferService.bloque_transfer(reference,motif);
-        Transfer transfer = multitransfer.getTransfers().get(0);
         SMSRequest smsRequest_src = new SMSRequest(multitransfer.getSender_phnumber());
         smsRequest_src.setLock_NotifyMsg(motif,multitransfer);
         smsService.sendSMS(smsRequest_src);
